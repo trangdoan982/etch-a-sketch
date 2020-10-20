@@ -1,37 +1,99 @@
-## Welcome to GitHub Pages
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Etch A Sketch</title>
+        <link rel="stylesheet" href="style.css"> 
+       </head>
+    <body>
+        <div class="banner">
+            <h1 class="banner-title">Etch A Sketch</h1>
+            <p class="tagline">Hello, Let's draw something nice.</p>
+            <div class="buttons">
+                <button class="clear-grid">Clear Grid </button>
+                <button class="bw">Black and White</button>
+                <button class="random">Random</button>
+            </div>       
+        </div>
+        <div class="grid"> 
+            <div class="container"></div>
+        </div>
+       
+    </body>
 
-You can use the [editor on GitHub](https://github.com/trangdoan982/etch-a-sketch/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+    <script> 
+    const bw_btn = document.querySelector(".bw");
+        const random_btn = document.querySelector(".random");
+        const clearGrid_btn = document.querySelector(".clear-grid");
+        const container = document.querySelector('.container');
+        let theme=0;   
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
-### Markdown
+        //change color function
+        function changeColor (e) {
+            switch (theme) {
+                case 0: 
+                    this.style.backgroundColor = "black";
+                    this.classList.add('.black');
+                    break;
+                case 1:
+                    this.style.backgroundColor = randomizeColor();
+                    this.classList.add(".Random");
+                    break;
+            }
+        }
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+        function randomizeColor(e) {
+            let randomColor = Math.floor(Math.random()*16777215).toString(16);
+            let color = "#"+randomColor;
+            return color; 
+        }
 
-```markdown
-Syntax highlighted code block
 
-# Header 1
-## Header 2
-### Header 3
+        //create grid function
+        function createGrid(size) {
+            //2 is double the size of border for each 
+            let widthSquare = (container.offsetWidth)/size - 2;
+            for (let c=0; c<(size**2); c++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell')
+                cell.setAttribute('style', 
+                    'border: 1px solid black');
+                cell.style.height = widthSquare + 'px';
+                cell.style.width = widthSquare + 'px';
+                container.appendChild(cell);
+            }
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach(cell => cell.addEventListener("mouseover", changeColor));
 
-- Bulleted
-- List
+        }
 
-1. Numbered
-2. List
+        function updateGridSize() {
+            dimension = prompt("What is the size of the grid?", 16);
+            return dimension;
+        }
+        
 
-**Bold** and _Italic_ and `Code` text
+       function clearGrid(e) {
+            while (container.firstChild) {
+            container.removeChild(container.lastChild);
+            }
+            updateGridSize();
+            createGrid(dimension);
+        }
 
-[Link](url) and ![Image](src)
-```
+        //add event listeners for each buttons
+        bw_btn.addEventListener("click", () => {
+            theme = 0;
+            });
+        random_btn.addEventListener("click",() =>  {
+            theme = 1});
+       
+        clearGrid_btn.addEventListener("click", clearGrid);
+        
+        
+    let size = prompt("What is the size of the grid?", 16);
+    createGrid(size);
+    console.log(theme);
+    </script>
+</html>
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/trangdoan982/etch-a-sketch/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
